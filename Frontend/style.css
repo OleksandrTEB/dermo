@@ -1,0 +1,338 @@
+@font-face {
+  font-family: "Custom";
+  src: url("styles/font/NetflixSans-Medium.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Custom;
+  outline: none;
+  color: white;
+  border: none;
+  background-color: transparent;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  background-color: #0d1117;
+}
+body main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body main header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 2rem;
+  background-color: #010409;
+  width: 100%;
+  padding: 1rem;
+  box-shadow: rgb(61, 68, 77) 0px -1px 0px 0px inset;
+}
+body main .content {
+  width: 100%;
+}
+body main .content .base-interface {
+  display: flex;
+  flex-direction: column;
+}
+body main .content .base-interface .options-container {
+  display: flex;
+  flex-direction: row;
+  width: 800px;
+  margin: 1rem auto 0 auto;
+  align-items: center;
+  border-radius: 5px;
+  gap: 1rem;
+  justify-content: space-between;
+}
+body main .content .base-interface .options-container a {
+  text-align: center;
+  min-height: 40px;
+  font-size: 14px;
+  padding: 5px 16px;
+  background-color: #238636;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  color: white;
+  width: 100%;
+  max-width: 100px;
+}
+body main .content .base-interface .options-container a:hover {
+  cursor: pointer;
+  background-color: #1b662a;
+}
+body main .content .base-interface .options-container a:active {
+  background-color: #165322;
+}
+body main .content .base-interface .options-container .information {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 500px;
+  gap: 1rem;
+}
+body main .content .base-interface .options-container .information .mouth, body main .content .base-interface .options-container .information .year {
+  font-size: 2rem;
+}
+body main .content .base-interface .wrapper-days-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 1rem;
+}
+body main .content .base-interface .wrapper-days-container .week-days-container, body main .content .base-interface .wrapper-days-container .days-container {
+  display: grid;
+  width: 95%;
+  margin: 0 auto 0 auto;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+body main .content .base-interface .wrapper-days-container .week-days-container div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(67, 168, 168, 0.51);
+  border-radius: 8px;
+  padding: 5px;
+}
+body main .content .base-interface .wrapper-days-container .week-days-container .red {
+  background-color: red;
+}
+body main .content .base-interface .wrapper-days-container .week-days-container .green {
+  background-color: green;
+}
+body main .content .base-interface .wrapper-days-container .days-container .day-container {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.1);
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  border-radius: 8px;
+  padding: 10px;
+}
+body main .content .base-interface .wrapper-days-container .days-container .day-container .day {
+  text-shadow: -1px 0px 1px #000, 1px 0px 1px #000, 0px 1px 1px #000, 1px 1px 1px #000;
+  font-size: 2rem;
+}
+body main .content .base-interface .wrapper-days-container .days-container .day-container:hover {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.16);
+}
+body main .content .base-interface .wrapper-days-container .days-container .day-container .msg-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: end;
+  gap: 5px;
+  width: 100%;
+  height: 100%;
+}
+body main .content .base-interface .wrapper-days-container .days-container .day-container .msg-container .msg {
+  width: 10px;
+  height: 10px;
+  background-color: rgb(23, 172, 28);
+  border-radius: 50%;
+}
+body main .content .base-interface .wrapper-days-container .days-container .to-day {
+  background-color: rgba(255, 255, 255, 0.36);
+}
+body main .content .base-interface .wrapper-days-container .empty {
+  background-color: transparent;
+}
+body main .modal-window {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.65);
+  position: absolute;
+  top: 0;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+body main .modal-window .container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+body main .modal-window .container .back-button {
+  align-self: flex-start;
+}
+body main .modal-window .container .back-button button {
+  text-align: center;
+  min-height: 40px;
+  font-size: 14px;
+  padding: 5px 16px;
+  background-color: #c32121;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  color: white;
+  width: 100%;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+body main .modal-window .container .back-button button:hover {
+  cursor: pointer;
+  background-color: #b12727;
+}
+body main .modal-window .container .back-button button:active {
+  background-color: #b82f2f;
+}
+body main .modal-window .container .back-button button img {
+  object-fit: cover;
+  width: 44px;
+  height: 44px;
+}
+body main .modal-window .container form {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  background-color: #252e3c;
+  border-radius: 5px;
+  padding: 10px;
+  gap: 10px;
+}
+body main .modal-window .container form .text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+body main .modal-window .container form .text label {
+  font-size: 1.1rem;
+}
+body main .modal-window .container form .text textarea {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #3D444D;
+  height: 40px;
+  background-color: #0d1117;
+  height: auto;
+}
+body main .modal-window .container form .text textarea:focus {
+  background-color: #0d1117;
+  border: 2px solid rgb(39, 68, 228);
+  padding: 5px 9px;
+  outline: none;
+}
+body main .modal-window .container form .submit-task button {
+  text-align: center;
+  min-height: 40px;
+  font-size: 14px;
+  padding: 5px 16px;
+  background-color: #238636;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  color: white;
+  width: 100%;
+}
+body main .modal-window .container form .submit-task button:hover {
+  cursor: pointer;
+  background-color: #1b662a;
+}
+body main .modal-window .container form .submit-task button:active {
+  background-color: #165322;
+}
+body main .modal-window .container form .exit-task button {
+  text-align: center;
+  min-height: 40px;
+  font-size: 14px;
+  padding: 5px 16px;
+  background-color: #a62222;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  color: white;
+  width: 100%;
+}
+body main .modal-window .container form .exit-task button:hover {
+  cursor: pointer;
+  background-color: #c32323;
+}
+body main .modal-window .container form .exit-task button:active {
+  background-color: #671010;
+}
+body main .modal-window .container .tasks-info {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(27, 61, 172);
+  width: 500px;
+  padding: 10px;
+  border-radius: 5px;
+}
+body main .modal-window .container .tasks-info .header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+body main .modal-window .container .tasks-info .header .title {
+  font-size: 1.1rem;
+}
+body main .modal-window .container .tasks-info .header .add-button {
+  width: 50px;
+  height: 50px;
+}
+body main .modal-window .container .tasks-info .header .add-button button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 40px;
+  font-size: 14px;
+  padding: 5px 16px;
+  background-color: #238636;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  color: white;
+  width: 100%;
+  padding: 0;
+}
+body main .modal-window .container .tasks-info .header .add-button button:hover {
+  cursor: pointer;
+  background-color: #1b662a;
+}
+body main .modal-window .container .tasks-info .header .add-button button:active {
+  background-color: #165322;
+}
+body main .modal-window .container .tasks-info .header .add-button button img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+body main .modal-window .container .tasks-info .list-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+body main .modal-window .container .tasks-info .list-tasks .task-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(42, 198, 31, 0.49);
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 6px;
+}
+
+/*# sourceMappingURL=style.css.map */

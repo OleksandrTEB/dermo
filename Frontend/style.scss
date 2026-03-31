@@ -1,0 +1,275 @@
+@use "styles/global" as *;
+@use "styles/font/font" as *;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Custom;
+  outline: none;
+  color: white;
+  border: none;
+  background-color: transparent;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  background-color: #0d1117;
+
+  main {
+    @include flex-column;
+    align-items: center;
+
+    header {
+      @include flex-row;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 2rem;
+      background-color: #010409;
+      width: 100%;
+      padding: 1rem;
+      box-shadow: rgb(61, 68, 77) 0px -1px 0px 0px inset;
+    }
+
+    .content {
+      width: 100%;
+
+      .base-interface {
+        display: flex;
+        flex-direction: column;
+
+        .options-container {
+          @include flex-row;
+          width: 800px;
+          margin: 1rem auto 0 auto;
+          align-items: center;
+          border-radius: 5px;
+          gap: 1rem;
+          justify-content: space-between;
+
+          a {
+            @include base-button();
+            max-width: 100px;
+          }
+
+          .information {
+            @include flex-row;
+            justify-content: space-between;
+            width: 500px;
+            gap: 1rem;
+
+            .mouth, .year {
+              font-size: 2rem;
+            }
+          }
+        }
+
+        .wrapper-days-container {
+          @include flex-column;
+          gap: 10px;
+          margin-top: 1rem;
+          .week-days-container, .days-container {
+            display: grid;
+            width: 95%;
+            margin: 0 auto 0 auto;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+          }
+
+          .week-days-container {
+            div {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background-color: rgba(67, 168, 168, 0.51);
+              border-radius: 8px;
+              padding: 5px;
+            }
+
+            .red {
+              background-color: red;
+            }
+
+            .green {
+              background-color: green;
+            }
+          }
+
+          .days-container {
+            .day-container {
+              @include flex-column;
+              background-color: rgba(255, 255, 255, 0.1);
+              justify-content: center;
+              align-items: center;
+              height: 100px;
+              border-radius: 8px;
+              padding: 10px;
+
+              .day {
+                text-shadow: -1px 0px 1px #000, 1px 0px 1px #000, 0px 1px 1px #000, 1px 1px 1px #000;
+                font-size: 2rem;
+              }
+
+              &:hover {
+                cursor: pointer;
+                background-color: rgba(255, 255, 255, 0.16);
+              }
+
+              .msg-container {
+                display: flex;
+                flex-direction: row;
+                justify-content: end;
+                align-items: end;
+                gap: 5px;
+                width: 100%;
+                height: 100%;
+
+                .msg {
+                  width: 10px;
+                  height: 10px;
+                  background-color: rgb(23, 172, 28);
+                  border-radius: 50%;
+                }
+              }
+            }
+
+            .to-day {
+              background-color: rgba(255, 255, 255, 0.36);
+            }
+          }
+
+          .empty {
+            background-color: transparent;
+          }
+        }
+      }
+    }
+
+    .modal-window {
+      display: none;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.65);
+      position: absolute;
+      top: 0;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+
+      .container {
+        @include flex-column;
+        gap: 10px;
+
+        .back-button {
+          align-self: flex-start;
+
+          button {
+            @include base-button(100%, #c32121, #b12727, #b82f2f);
+            padding: 0 10px;
+            @include flex-center;
+
+            img {
+              object-fit: cover;
+              width: 44px;
+              height: 44px;
+            }
+          }
+        }
+
+        form {
+          @include flex-column;
+          width: 500px;
+          background-color: #252e3c;
+          border-radius: 5px;
+          padding: 10px;
+          gap: 10px;
+
+          .text {
+            @include flex-column;
+            align-items: center;
+            gap: 10px;
+
+            label {
+              font-size: 1.1rem;
+            }
+
+            textarea {
+              @include base-input;
+              background-color: #0d1117;
+              height: auto;
+            }
+          }
+
+          .submit-task {
+            button {
+              @include base-button;
+            }
+          }
+
+          .exit-task {
+            button {
+              @include base-button(100%, #a62222, #c32323, #671010);
+            }
+          }
+        }
+
+        .tasks-info {
+          display: flex;
+          flex-direction: column;
+          background-color: rgb(27, 61, 172);
+          width: 500px;
+          padding: 10px;
+          border-radius: 5px;
+
+          .header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+
+            .title {
+              font-size: 1.1rem;
+            }
+
+            .add-button {
+              width: 50px;
+              height: 50px;
+
+              button {
+                @include flex-center;
+                @include base-button;
+                padding: 0;
+
+
+                img {
+                  @include base-img;
+                }
+              }
+            }
+          }
+
+          .list-tasks {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .task-container {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: space-between;
+              background-color: rgba(42, 198, 31, 0.49);
+              padding: 10px;
+              border-radius: 5px;
+              margin-top: 6px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
