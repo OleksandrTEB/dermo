@@ -40,6 +40,8 @@ function closeModal() {
     taskForm.reset();
 }
 
-window.onclick = function(event) {
-    if (event.target === modal) closeModal();
-}
+modal.addEventListener('click', (e) => {
+    if(e.target.closest('[data-role="exit"]')) {
+        closeModal();
+    }
+});

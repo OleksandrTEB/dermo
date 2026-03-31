@@ -6,8 +6,7 @@ $db = "kalendarz";
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass, [
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ]);
 } catch (PDOException $e) {
     die("Błąd połączenia: " . $e->getMessage());
@@ -26,7 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit;
 }
 
-$year = isset($_GET['year']) ? (int)$_GET['year'] : (int)date('Y');
+if (isset($_GET['year'])) {
+    $year = (int)$_GET['year'];
+} else {
+    $year = (int)date('Y');
+}
+
 $month = isset($_GET['month']) ? (int)$_GET['month'] : (int)date('n');
 
 $prevMonth = $month - 1;
@@ -38,7 +42,10 @@ if ($prevMonth < 1) {
 
 $nextMonth = $month + 1;
 $nextYear = $year;
-if ($nextMonth > 12) { $nextMonth = 1; $nextYear++; }
+if ($nextMonth > 12) {
+    $nextMonth = 1;
+    $nextYear++;
+}
 
 $startDate = "$year-" . str_pad($month, 2, '0', STR_PAD_LEFT) . "-01";
 $endDate = date("Y-m-t", strtotime($startDate));
@@ -62,8 +69,9 @@ $firstDayIndex = date('N', strtotime($startDate));
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Kalendarz PHP</title>
+    <title>Kalendarz</title>
     <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./img/calendar.png">
 </head>
 <body>
 <main>
@@ -127,7 +135,7 @@ $firstDayIndex = date('N', strtotime($startDate));
     <div class="modal-window" id="modal">
         <div class="container">
             <div class="back-button">
-                <button type="button" onclick="closeModal()">
+                <button type="button" onclick="closeModal()" data-role="exit">
                     <img src="./img/exit.png" alt="Wstecz">
                 </button>
             </div>
