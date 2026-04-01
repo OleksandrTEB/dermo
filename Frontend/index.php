@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db = "kalendarz";
+$db = "kalendarz2";
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass, [
@@ -12,12 +12,19 @@ try {
     die("Błąd połączenia: " . $e->getMessage());
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_task') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['type'])) {
     $date = $_POST['date'];
     $text = $_POST['value'];
+    $type = $_POST['type'];
 
     if (!empty($date) && !empty($text)) {
-        $stmt = $pdo->prepare("INSERT INTO zadania (data_zadania, text) VALUES (:date, :text)");
+
+        if ($type === 'zadanie') {
+            $stmt = $pdo->prepare("INSERT INTO zadania (data_zadania, text) VALUES (:date, :text)");
+        } else if ($type === 'spotkanie') {
+            $stmt = $pdo->prepare("INSERT INTO spotkania (data_spotkania, text) VALUES (:date, :text)");
+        }
+
         $stmt->execute(['date' => $date, 'text' => $text]);
     }
 
@@ -60,6 +67,17 @@ foreach ($allTasks as $t) {
     $tasksByDay[$d][] = $t;
 }
 
+$stmt = $pdo->prepare("SELECT * FROM spotkania WHERE data_spotkania BETWEEN :start AND :end");
+$stmt->execute(['start' => $startDate, 'end' => $endDate]);
+$allMeeting = $stmt->fetchAll();
+
+$meetingByDay = [];
+foreach ($allMeeting as $m) {
+    $d = (int)date('j', strtotime($m['data_spotkania']));
+    $meetingByDay[$d][] = $m;
+}
+
+
 $monthsNames = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
 $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 $firstDayIndex = date('N', strtotime($startDate));
@@ -76,7 +94,7 @@ $firstDayIndex = date('N', strtotime($startDate));
 <body>
 <main>
     <header>
-        <span class="title">System Kalendarza PHP</span>
+        <span class="title">Witamy w naszym systemie kalendarza</span>
     </header>
 
     <div class="content">
@@ -116,13 +134,18 @@ $firstDayIndex = date('N', strtotime($startDate));
                     <?php for ($d = 1; $d <= $daysInMonth; $d++):
                         $isToday = ($d == date('j') && $month == date('n') && $year == date('Y'));
                         $hasTasks = isset($tasksByDay[$d]);
+                        $hasMeeting = isset($meetingByDay[$d]);
                         ?>
                         <div class="day-container <?= $isToday ? 'to-day' : '' ?>"
-                             onclick="openModal(<?= $d ?>, '<?= $year ?>-<?= str_pad($month, 2, '0', STR_PAD_LEFT) ?>-<?= str_pad($d, 2, '0', STR_PAD_LEFT) ?>', <?= htmlspecialchars(json_encode($tasksByDay[$d] ?? [])) ?>)">
+                             onclick="openModal(<?= $d ?>, '<?= $year ?>-<?= str_pad($month, 2, '0', STR_PAD_LEFT) ?>-<?= str_pad($d, 2, '0', STR_PAD_LEFT) ?>', <?= htmlspecialchars(json_encode($tasksByDay[$d] ?? [])) ?>, <?= htmlspecialchars(json_encode($meetingByDay[$d] ?? [])) ?>)">
                             <span class="day"><?= $d ?></span>
                             <div class="msg-container">
                                 <?php if ($hasTasks): ?>
                                     <div class="msg"></div>
+                                <?php endif; ?>
+
+                                <?php if ($hasMeeting): ?>
+                                    <div class="meeting"></div>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -143,10 +166,17 @@ $firstDayIndex = date('N', strtotime($startDate));
             <form class="second-form" method="POST" id="taskForm">
                 <input type="hidden" name="action" value="add_task">
                 <input type="hidden" name="date" id="modalDateInput">
+
+                <select class="sel" name="type" id="type">
+                    <option class="op" value="zadanie">Zadanie</option>
+                    <option class="op" value="spotkanie">Spotkanie</option>
+                </select>
+
                 <div class="text">
-                    <label for="value">Treść zadania dla dnia <span id="selectedDateLabel"></span>:</label>
+                    <label for="value">Treść <span id="selectedDateLabel"></span>:</label>
                     <textarea name="value" id="value" cols="60" rows="4" required></textarea>
                 </div>
+
                 <div class="submit-task">
                     <button type="submit">Zapisz</button>
                 </div>
@@ -154,7 +184,7 @@ $firstDayIndex = date('N', strtotime($startDate));
 
             <div class="tasks-info" id="tasksInfo">
                 <div class="header">
-                    <div class="title">Zadania:</div>
+                    <div class="title">Wydażenia:</div>
                     <div class="add-button">
                         <button type="button" onclick="showForm()">
                             <img src="./img/plus.png" alt="Dodaj">

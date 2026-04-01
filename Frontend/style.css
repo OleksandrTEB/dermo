@@ -66,7 +66,6 @@ body main .content .base-interface .options-container a {
   font-weight: 500;
   color: white;
   width: 100%;
-  max-width: 100px;
 }
 body main .content .base-interface .options-container a:hover {
   cursor: pointer;
@@ -74,6 +73,9 @@ body main .content .base-interface .options-container a:hover {
 }
 body main .content .base-interface .options-container a:active {
   background-color: #165322;
+}
+body main .content .base-interface .options-container a {
+  max-width: 100px;
 }
 body main .content .base-interface .options-container .information {
   display: flex;
@@ -145,6 +147,12 @@ body main .content .base-interface .wrapper-days-container .days-container .day-
   background-color: rgb(23, 172, 28);
   border-radius: 50%;
 }
+body main .content .base-interface .wrapper-days-container .days-container .day-container .msg-container .meeting {
+  width: 10px;
+  height: 10px;
+  background-color: rgb(255, 0, 0);
+  border-radius: 50%;
+}
 body main .content .base-interface .wrapper-days-container .days-container .to-day {
   background-color: rgba(255, 255, 255, 0.36);
 }
@@ -181,11 +189,6 @@ body main .modal-window .container .back-button button {
   font-weight: 500;
   color: white;
   width: 100%;
-  padding: 0 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 body main .modal-window .container .back-button button:hover {
   cursor: pointer;
@@ -194,8 +197,16 @@ body main .modal-window .container .back-button button:hover {
 body main .modal-window .container .back-button button:active {
   background-color: #b82f2f;
 }
+body main .modal-window .container .back-button button {
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 body main .modal-window .container .back-button button img {
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   width: 44px;
   height: 44px;
 }
@@ -207,6 +218,12 @@ body main .modal-window .container form {
   border-radius: 5px;
   padding: 10px;
   gap: 10px;
+}
+body main .modal-window .container form .sel {
+  color: rgb(255, 255, 255);
+}
+body main .modal-window .container form .sel .op {
+  color: black;
 }
 body main .modal-window .container form .text {
   display: flex;
@@ -222,14 +239,16 @@ body main .modal-window .container form .text textarea {
   border-radius: 6px;
   border: 1px solid #3D444D;
   height: 40px;
-  background-color: #0d1117;
-  height: auto;
 }
 body main .modal-window .container form .text textarea:focus {
   background-color: #0d1117;
   border: 2px solid rgb(39, 68, 228);
   padding: 5px 9px;
   outline: none;
+}
+body main .modal-window .container form .text textarea {
+  background-color: #0d1117;
+  height: auto;
 }
 body main .modal-window .container form .submit-task button {
   text-align: center;
@@ -305,7 +324,6 @@ body main .modal-window .container .tasks-info .header .add-button button {
   font-weight: 500;
   color: white;
   width: 100%;
-  padding: 0;
 }
 body main .modal-window .container .tasks-info .header .add-button button:hover {
   cursor: pointer;
@@ -314,8 +332,12 @@ body main .modal-window .container .tasks-info .header .add-button button:hover 
 body main .modal-window .container .tasks-info .header .add-button button:active {
   background-color: #165322;
 }
+body main .modal-window .container .tasks-info .header .add-button button {
+  padding: 0;
+}
 body main .modal-window .container .tasks-info .header .add-button button img {
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   width: 100%;
   height: 100%;
 }
@@ -334,5 +356,13 @@ body main .modal-window .container .tasks-info .list-tasks .task-container {
   border-radius: 5px;
   margin-top: 6px;
 }
-
-/*# sourceMappingURL=style.css.map */
+body main .modal-window .container .tasks-info .list-tasks .meeting-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(255, 0, 0, 0.49);
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 6px;
+}/*# sourceMappingURL=style.css.map */
