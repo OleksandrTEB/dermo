@@ -15,22 +15,29 @@ try {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['type'])) {
     $date = $_POST['date'];
     $text = $_POST['value'];
+    $time = $_POST['time'] ?? null;
     $type = $_POST['type'];
 
-    if (!empty($date) && !empty($text)) {
-
-        if ($type === 'zadanie') {
-            $stmt = $pdo->prepare("INSERT INTO zadania (data_zadania, text) VALUES (:date, :text)");
-        } else if ($type === 'spotkanie') {
-            $stmt = $pdo->prepare("INSERT INTO spotkania (data_spotkania, text) VALUES (:date, :text)");
-        }
-
-        $stmt->execute(['date' => $date, 'text' => $text]);
+    if ($type === 'zadanie') {
+        $stmt = $pdo->prepare("INSERT INTO term (data, text) VALUES (:date, :text)");
+        $stmt->execute([
+            'date' => $date,
+            'text' => $text,
+        ]);
+    } else {
+        $stmt = $pdo->prepare("INSERT INTO term (data, time, text) VALUES (:date, :time, :text)");
+        $stmt->execute([
+            'date' => $date,
+            'time' => $time,
+            'text' => $text,
+        ]);
     }
 
     header("Location: index.php?year=" . date('Y', strtotime($date)) . "&month=" . date('n', strtotime($date)));
     exit;
 }
+
+
 
 if (isset($_GET['year'])) {
     $year = (int)$_GET['year'];
@@ -38,7 +45,11 @@ if (isset($_GET['year'])) {
     $year = (int)date('Y');
 }
 
-$month = isset($_GET['month']) ? (int)$_GET['month'] : (int)date('n');
+if(isset($_GET['month'])) {
+    $month = (int)$_GET['month'];
+} else {
+    $month = (int)date('n');
+}
 
 $prevMonth = $month - 1;
 $prevYear = $year;
@@ -57,24 +68,16 @@ if ($nextMonth > 12) {
 $startDate = "$year-" . str_pad($month, 2, '0', STR_PAD_LEFT) . "-01";
 $endDate = date("Y-m-t", strtotime($startDate));
 
-$stmt = $pdo->prepare("SELECT * FROM zadania WHERE data_zadania BETWEEN :start AND :end");
-$stmt->execute(['start' => $startDate, 'end' => $endDate]);
-$allTasks = $stmt->fetchAll();
-
-$tasksByDay = [];
-foreach ($allTasks as $t) {
-    $d = (int)date('j', strtotime($t['data_zadania']));
-    $tasksByDay[$d][] = $t;
-}
-
-$stmt = $pdo->prepare("SELECT * FROM spotkania WHERE data_spotkania BETWEEN :start AND :end");
-$stmt->execute(['start' => $startDate, 'end' => $endDate]);
-$allMeeting = $stmt->fetchAll();
-
-$meetingByDay = [];
-foreach ($allMeeting as $m) {
-    $d = (int)date('j', strtotime($m['data_spotkania']));
-    $meetingByDay[$d][] = $m;
+$stmt = $pdo->prepare("SELECT * FROM term WHERE data BETWEEN :start AND :end");
+$stmt->execute([
+    'start' => $startDate,
+    'end' => $endDate,
+    ]);
+$allTerms = $stmt->fetchAll();
+$termsByDay = [];
+foreach ($allTerms as $t) {
+    $d = (int)date('j', strtotime($t['data']));
+    $termsByDay[$d][] = $t;
 }
 
 
@@ -133,19 +136,15 @@ $firstDayIndex = date('N', strtotime($startDate));
 
                     <?php for ($d = 1; $d <= $daysInMonth; $d++):
                         $isToday = ($d == date('j') && $month == date('n') && $year == date('Y'));
-                        $hasTasks = isset($tasksByDay[$d]);
-                        $hasMeeting = isset($meetingByDay[$d]);
+                        $hasTerms = isset($termsByDay[$d]);
                         ?>
                         <div class="day-container <?= $isToday ? 'to-day' : '' ?>"
-                             onclick="openModal(<?= $d ?>, '<?= $year ?>-<?= str_pad($month, 2, '0', STR_PAD_LEFT) ?>-<?= str_pad($d, 2, '0', STR_PAD_LEFT) ?>', <?= htmlspecialchars(json_encode($tasksByDay[$d] ?? [])) ?>, <?= htmlspecialchars(json_encode($meetingByDay[$d] ?? [])) ?>)">
+                            data-date="<?= $year ?>-<?= str_pad($month, 2, '0', STR_PAD_LEFT) ?>-<?= str_pad($d, 2, '0', STR_PAD_LEFT) ?>"
+                            data-terms='<?= json_encode($termsByDay[$d] ?? []) ?>'>
                             <span class="day"><?= $d ?></span>
                             <div class="msg-container">
-                                <?php if ($hasTasks): ?>
+                                <?php if ($hasTerms): ?>
                                     <div class="msg"></div>
-                                <?php endif; ?>
-
-                                <?php if ($hasMeeting): ?>
-                                    <div class="meeting"></div>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -158,7 +157,7 @@ $firstDayIndex = date('N', strtotime($startDate));
     <div class="modal-window" id="modal">
         <div class="container">
             <div class="back-button">
-                <button type="button" onclick="closeModal()" data-role="exit">
+                <button type="button" data-role="exit">
                     <img src="./img/exit.png" alt="Wstecz">
                 </button>
             </div>
@@ -171,6 +170,11 @@ $firstDayIndex = date('N', strtotime($startDate));
                     <option class="op" value="zadanie">Zadanie</option>
                     <option class="op" value="spotkanie">Spotkanie</option>
                 </select>
+
+                <div class="czas">
+                    <label for="time">Czas:</label>
+                    <input type="time" name="time" id="time">
+                </div>
 
                 <div class="text">
                     <label for="value">Treść <span id="selectedDateLabel"></span>:</label>
@@ -186,7 +190,7 @@ $firstDayIndex = date('N', strtotime($startDate));
                 <div class="header">
                     <div class="title">Wydażenia:</div>
                     <div class="add-button">
-                        <button type="button" onclick="showForm()">
+                        <button type="button" data-role="add">
                             <img src="./img/plus.png" alt="Dodaj">
                         </button>
                     </div>

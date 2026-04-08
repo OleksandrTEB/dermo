@@ -4,65 +4,61 @@ const tasksInfo = document.getElementById('tasksInfo');
 const taskListContent = document.getElementById('taskListContent');
 const modalDateInput = document.getElementById('modalDateInput');
 const selectedDateLabel = document.getElementById('selectedDateLabel');
+const czas = document.querySelector('.czas');
+const btn = document.querySelector('[data-role="exit"]');
+const btnAdd = document.querySelector('[data-role="add"]');
+const daysContainer = document.querySelector('.days-container');
+const type = document.getElementById('type');
 
-function openModal(day, fullDate, tasks, meeting) {
+daysContainer.addEventListener('click', (e) => {
+    const el = e.target.closest('.day-container');
+    if (!el) return;
+
+    const date = el.dataset.date;
+    const terms = JSON.parse(el.dataset.terms);
+
+    openModal(date, terms);
+});
+
+if (btn) {
+    btn.addEventListener('click', closeModal);
+}
+
+if (btnAdd) {
+    btnAdd.addEventListener('click', showForm);
+}
+
+function openModal(fullDate, terms) {
     modal.style.display = 'flex';
     modalDateInput.value = fullDate;
     selectedDateLabel.textContent = fullDate;
 
-    if (tasks.length > 0 && meeting.length > 0) {
-        showAll(meeting, tasks)
-    } else if (meeting.length > 0) {
-        showMeetig(meeting)
-    } else if (tasks.length > 0) {
-        showTasks(tasks);
+    if (terms.length > 0) {
+        showTerms(terms);
     } else {
         showForm();
     }
 }
 
-function showTasks(tasks) {
+function showTerms(terms) {
     tasksInfo.style.display = 'flex';
     taskForm.style.display = 'none';
 
     taskListContent.innerHTML = '';
-    tasks.forEach(t => {
-        const div = document.createElement('div');
-        div.classList.add('task-container');
-        div.innerHTML = `<span class="task-text">${t.text}</span>`;
-        taskListContent.appendChild(div);
-    });
-}
 
-function showMeetig(meeting) {
-    tasksInfo.style.display = 'flex';
-    taskForm.style.display = 'none';
-
-    taskListContent.innerHTML = '';
-    meeting.forEach(t => {
+    terms.forEach(t => {
         const div = document.createElement('div');
-        div.classList.add('meeting-container');
-        div.innerHTML = `<span class="task-text">${t.text}</span>`;
-        taskListContent.appendChild(div);
-    });
-}
 
-function showAll(meeting, tasks) {
-    tasksInfo.style.display = 'flex';
-    taskForm.style.display = 'none';
+        if (t.time && t.time !== "00:00:00") {
+            div.classList.add('meeting-container');
 
-    taskListContent.innerHTML = '';
-    meeting.forEach(t => {
-        const div = document.createElement('div');
-        div.classList.add('meeting-container');
-        div.innerHTML = `<span class="task-text">${t.text}</span>`;
-        taskListContent.appendChild(div);
-    });
-    
-    tasks.forEach(t => {
-        const div = document.createElement('div');
-        div.classList.add('task-container');
-        div.innerHTML = `<span class="task-text">${t.text}</span>`;
+            const time = t.time.slice(0, 5);
+            div.textContent = `[${time}] ${t.text}`;
+        } else {
+            div.classList.add('task-container');
+            div.textContent = t.text;
+        }
+
         taskListContent.appendChild(div);
     });
 }
@@ -78,7 +74,15 @@ function closeModal() {
 }
 
 modal.addEventListener('click', (e) => {
-    if(e.target.closest('[data-role="exit"]')) {
+    if (e.target.closest('[data-role="exit"]')) {
         closeModal();
+    }
+});
+
+type.addEventListener('change', (e) => {
+    if (e.target.value === "zadanie") {
+        czas.style.display = "none";
+    } else {
+        czas.style.display = "block";
     }
 });

@@ -84,7 +84,8 @@ body main .content .base-interface .options-container .information {
   width: 500px;
   gap: 1rem;
 }
-body main .content .base-interface .options-container .information .mouth, body main .content .base-interface .options-container .information .year {
+body main .content .base-interface .options-container .information .mouth,
+body main .content .base-interface .options-container .information .year {
   font-size: 2rem;
 }
 body main .content .base-interface .wrapper-days-container {
@@ -93,7 +94,8 @@ body main .content .base-interface .wrapper-days-container {
   gap: 10px;
   margin-top: 1rem;
 }
-body main .content .base-interface .wrapper-days-container .week-days-container, body main .content .base-interface .wrapper-days-container .days-container {
+body main .content .base-interface .wrapper-days-container .week-days-container,
+body main .content .base-interface .wrapper-days-container .days-container {
   display: grid;
   width: 95%;
   margin: 0 auto 0 auto;
@@ -224,6 +226,9 @@ body main .modal-window .container form .sel {
 }
 body main .modal-window .container form .sel .op {
   color: black;
+}
+body main .modal-window .container form .czas {
+  display: none;
 }
 body main .modal-window .container form .text {
   display: flex;
